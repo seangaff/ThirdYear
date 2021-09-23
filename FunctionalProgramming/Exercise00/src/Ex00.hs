@@ -1,9 +1,9 @@
 module Ex00 where
 
 name, idno, username :: String
-name      =  "Myself, Me"  -- replace with your name
-idno      =  "01234567"    -- replace with your student id
-username  =  "memyselfi"   -- replace with your TCD username
+name      =  "Gaffney, Sean"  -- replace with your name
+idno      =  "19304695"    -- replace with your student id
+username  =  "gaffnese@tcd.ie"   -- replace with your TCD username
 
 
 declaration -- do NOT modify this
@@ -16,4 +16,4 @@ declaration -- do NOT modify this
 
 {- Modify everything below here to ensure all tests pass -}
 
-hello  =  "I am currently a failing exercise"
+hello  =  "Hello World :-)"
