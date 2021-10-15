@@ -2,13 +2,24 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
+import java.util.ArrayList;
 
 public abstract class Node {
 	static final int PACKETSIZE = 65536;
 
+	public static final int BROKER_PORT = 50000;
+    public static final int SERVER_PORT = 50001;
+	public static final int ClIENT_PORT = 50002;
+    public static final int SUBSCRIBER_PORT = 50005;
+
+	static final String DEFAULT_DST_NODE = "broker";
+	static final int DEFAULT_DST_PORT = 50000;
+
 	DatagramSocket socket;
 	Listener listener;
 	CountDownLatch latch;
+
+	//public ArrayList<String> subscribers;
 
 	Node() {
 		latch= new CountDownLatch(1);

@@ -15,9 +15,8 @@ import java.io.FileInputStream;
  *
  */
 public class Client extends Node {
-	static final int DEFAULT_SRC_PORT = 50000;
-	static final int DEFAULT_DST_PORT = 50001;
-	static final String DEFAULT_DST_NODE = "server";
+	//static final int DEFAULT_SRC_PORT = 50000;
+	//static final int DEFAULT_DST_PORT = 50001;
 	InetSocketAddress dstAddress;
 
 	/**
@@ -92,7 +91,7 @@ public class Client extends Node {
 	 */
 	public static void main(String[] args) {
 		try {
-			(new Client(DEFAULT_DST_NODE, DEFAULT_DST_PORT, DEFAULT_SRC_PORT)).start();
+			(new Client(DEFAULT_DST_NODE, BROKER_PORT, ClIENT_PORT)).start();
 			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}

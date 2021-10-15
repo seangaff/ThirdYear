@@ -13,9 +13,15 @@ import java.io.ObjectOutputStream;
 public abstract class PacketContent {
 
 	public static final int ACKPACKET= 10;
-	public static final int FILEINFO= 100;
+	public static final int FILEINFO = 20;
+	public static final int SUBPACKET = 30;
+
+	public static final int NOTOP = 0;
+	public static final int TOPA = 1;
+	public static final int TOPB = 2;
 
 	int type= 0;
+	int topic = 0;
 
 	/**
 	 * Constructs an object out of a datagram packet.
@@ -26,6 +32,7 @@ public abstract class PacketContent {
 
 		try {
 			int type;
+			int topic;
 
 			byte[] data;
 			ByteArrayInputStream bin;
@@ -43,6 +50,9 @@ public abstract class PacketContent {
 				break;
 			case FILEINFO:
 				content= new FileInfoContent(oin);
+				break;
+			case SUBPACKET:
+				content = new SubContent(oin);
 				break;
 			default:
 				content= null;
@@ -111,6 +121,9 @@ public abstract class PacketContent {
 	 */
 	public int getType() {
 		return type;
+	}
+	public int getTopic() {
+		return topic;
 	}
 
 }

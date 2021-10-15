@@ -2,7 +2,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
 public class Server extends Node {
-	static final int DEFAULT_PORT = 50001;
+	//static final int DEFAULT_PORT = 50001;
 	/*
 	 *
 	 */
@@ -17,7 +17,7 @@ public class Server extends Node {
 	/**
 	 * Assume that incoming packets contain a String and print the string.
 	 */
-	public void onReceipt(DatagramPacket packet) {
+	public synchronized void onReceipt(DatagramPacket packet) {
 		try {
 			System.out.println("Received packet");
 
@@ -47,7 +47,7 @@ public class Server extends Node {
 	 */
 	public static void main(String[] args) {
 		try {
-			(new Server(DEFAULT_PORT)).start();
+			(new Server(SERVER_PORT)).start();
 			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}
