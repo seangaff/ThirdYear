@@ -2,7 +2,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
-import java.util.ArrayList;
+import java.net.InetSocketAddress;
+//import java.util.ArrayList;
 
 public abstract class Node {
 	static final int PACKETSIZE = 65536;
@@ -12,8 +13,12 @@ public abstract class Node {
 	public static final int ClIENT_PORT = 50002;
     public static final int SUBSCRIBER_PORT = 50005;
 
-	static final String DEFAULT_DST_NODE = "broker";
-	static final int DEFAULT_DST_PORT = 50000;
+	public static final String DEFAULT_DST_NODE = "broker";
+	public static final int DEFAULT_DST_PORT = 50000;
+
+	public static final InetSocketAddress brokerAddress = new InetSocketAddress("broker", BROKER_PORT);
+	public static final InetSocketAddress serverAddress = new InetSocketAddress("server", SERVER_PORT);
+    public static final InetSocketAddress clientAddress = new InetSocketAddress("client", ClIENT_PORT);
 
 	DatagramSocket socket;
 	Listener listener;

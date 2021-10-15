@@ -8,9 +8,6 @@ public class Broker extends Node {
     ArrayList<InetSocketAddress> TopicA;
     ArrayList<InetSocketAddress> TopicB;
 
-    private InetSocketAddress serverAddress = new InetSocketAddress("server", SERVER_PORT);
-    private InetSocketAddress clientAddress = new InetSocketAddress("client", SUBSCRIBER_PORT);
-
     Broker(int port) {
         try {
             socket = new DatagramSocket(port);
@@ -25,9 +22,15 @@ public class Broker extends Node {
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
             System.out.println("Received packet");
+
+            DatagramPacket response;
+            response = new AckPacketContent("OK - Received this").toDatagramPacket();
+            response.setSocketAddress(packet.getSocketAddress());
+            socket.send(response);
+
 			PacketContent content= PacketContent.fromDatagramPacket(packet);
             int packetType = content.getType();
-            int packetTopic = PacketContent.TOPA;//content.getTopic();
+            int packetTopic = PacketContent.TOPA;
             TopicA.add(serverAddress);
             switch(packetType) { 
                 case PacketContent.ACKPACKET:
@@ -38,15 +41,18 @@ public class Broker extends Node {
                     DatagramPacket copyPacket = packet;
                     switch(packetTopic) {
                         case PacketContent.TOPA:
+                            System.out.println("TOPA");
                             for(InetSocketAddress i : TopicA) {
-                                copyPacket.setSocketAddress(i);
+                                System.out.println("Sending");
+                                copyPacket.setSocketAddress(serverAddress);
                                 socket.send(copyPacket);
+                                System.out.println("Sent");
                             }
                             break;
                         case PacketContent.TOPB:
                             for(InetSocketAddress i : TopicB) {
-                                packet.setSocketAddress(i);
-                                socket.send(packet);
+                                copyPacket.setSocketAddress(serverAddress);
+                                socket.send(copyPacket);
                             }
                             break;
                         case PacketContent.NOTOP:
@@ -55,12 +61,6 @@ public class Broker extends Node {
                             break;
                     }
 
-                    DatagramPacket response;
-                    response = new AckPacketContent("OK - Received this").toDatagramPacket();
-                    response.setSocketAddress(packet.getSocketAddress());
-                    socket.send(response);
-
-                    
                     break;
                 case PacketContent.SUBPACKET:
                     System.out.println("Received  Sub packet, adding sender to subscribers");
@@ -75,19 +75,14 @@ public class Broker extends Node {
         }
     }
     
-    private synchronized void start() {
-        try {
-            this.wait();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
+    public synchronized void start() throws Exception {
+		System.out.println("Waiting for contact");
+		this.wait();
+	}
 
     public static void main(String[] args) {
         try {
-            Broker broker = new Broker(BROKER_PORT);
-            System.out.println("Waiting for Contact...");
-            broker.start();
+            (new Broker(BROKER_PORT)).start();
         } catch(Exception e) {
             e.printStackTrace();
         }

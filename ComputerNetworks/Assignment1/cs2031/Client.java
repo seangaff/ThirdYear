@@ -24,9 +24,9 @@ public class Client extends Node {
 	 *
 	 * Attempts to create socket at given port and create an InetSocketAddress for the destinations
 	 */
-	Client(String dstHost, int dstPort, int srcPort) {
+	Client(InetSocketAddress dstAddress, int srcPort) {
 		try {
-			dstAddress= new InetSocketAddress(dstHost, dstPort);
+			this.dstAddress = dstAddress;
 			socket= new DatagramSocket(srcPort);
 			listener.go();
 		}
@@ -91,7 +91,7 @@ public class Client extends Node {
 	 */
 	public static void main(String[] args) {
 		try {
-			(new Client(DEFAULT_DST_NODE, BROKER_PORT, ClIENT_PORT)).start();
+			(new Client(brokerAddress, ClIENT_PORT)).start();
 			System.out.println("Program completed");
 		} catch(java.lang.Exception e) {e.printStackTrace();}
 	}
