@@ -1,0 +1,48 @@
+%CSU34011 Assignment 1
+%Sean Gaffney
+
+%change to .pl to run
+
+
+add(0,X,X).
+add(s(X),Y,s(Z)) :- add(X,Y,Z).
+add(p(X),Y,p(Z)) :- add(X,Y,Z).
+
+%Exercise 1
+add2(s(X+Y),B,s(Z)) :- add2(X+Y,B,Z).
+add2(A,s(X+Y),s(Z)) :- add2(A,X+Y,Z).
+add2(X+Y,B,Z) :- add(X,Y,A), add2(A,B,Z).
+add2(A,X+Y,Z) :- add(X,Y,B), add2(A,B,Z). 
+
+%Exercise 2
+add2(s(p(X)),Y,Z) :- add2(X,Y,Z).
+add2(X,s(p(Y)),Z) :- add2(X,Y,Z).
+add2(p(s(X)),Y,Z) :- add2(X,Y,Z).
+add2(X, p(s(Y)),Z) :- add2(X,Y,Z).
+
+%Exercise 4
+add2(s(X),p(Y),Z) :- add2(X,Y,Z).
+add2(p(X),s(Y),Z) :- add2(X,Y,Z).
+add2(-X,Y,Z) :- minus(X,A), add2(A,Y,Z).
+add2(X,-Y,Z) :- minus(Y,A), add2(X,A,Z).
+
+add2(X-Y, A, Z) :- subtract(X, Y, B), add2(B,A,Z). %ex6
+
+add2(X, Y, Z) :- add(X, Y, Z). %helper
+
+%Exercise 3
+minus(0,0).
+minus(s(p(X)),Y) :- minus(X,Y).
+minus(p(s(X)),Y) :- minus(X,Y).
+minus(s(X),p(Y)) :- minus(X,Y).
+minus(p(X),s(Y)) :- minus(X,Y).
+
+minus(X-Y, Z) :- subtract(X, Y, A), minus(A,Z). %ex6
+
+%Exercise 5
+subtract(-X,Y,Z) :- minus(X,A), subtract(A,Y,Z).
+subtract(X,-Y,Z) :- minus(Y,A), subtract(X,A,Z).
+subtract(X,Y,Z)  :- minus(Y,A), add2(X,A,Z).
+
+
+
