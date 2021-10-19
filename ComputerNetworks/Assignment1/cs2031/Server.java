@@ -6,10 +6,12 @@ public class Server extends Node {
 	/*
 	 *
 	 */
+	int count;
 	Server(int port) {
 		try {
 			socket= new DatagramSocket(port);
 			listener.go();
+			count = 0;
 		}
 		catch(java.lang.Exception e) {e.printStackTrace();}
 	}
@@ -31,6 +33,8 @@ public class Server extends Node {
 				response= new AckPacketContent("OK - Received this").toDatagramPacket();
 				response.setSocketAddress(packet.getSocketAddress());
 				socket.send(response);
+				count++;
+				System.out.println("Count: " + count);
 			}
 		}
 		catch(Exception e) {e.printStackTrace();}
