@@ -11,14 +11,16 @@ public abstract class Node {
 	public static final int BROKER_PORT = 50000;
     public static final int SERVER_PORT = 50001;
 	public static final int ClIENT_PORT = 50002;
-    public static final int SUBSCRIBER_PORT = 50005;
+    public static final int SUBSCRIBER_PORT = 50003;
 
-	public static final String DEFAULT_DST_NODE = "broker";
-	public static final int DEFAULT_DST_PORT = 50000;
+	//public static final String DEFAULT_DST_NODE = "broker";
+	//public static final int DEFAULT_DST_PORT = 50000;
 
 	public static final InetSocketAddress brokerAddress = new InetSocketAddress("broker", BROKER_PORT);
 	public static final InetSocketAddress serverAddress = new InetSocketAddress("server", SERVER_PORT);
     public static final InetSocketAddress clientAddress = new InetSocketAddress("client", ClIENT_PORT);
+	public static final InetSocketAddress subscriberAddress = new InetSocketAddress("subscriber", SUBSCRIBER_PORT);
+
 
 	DatagramSocket socket;
 	Listener listener;
