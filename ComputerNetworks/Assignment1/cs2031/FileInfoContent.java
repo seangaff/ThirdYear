@@ -1,3 +1,6 @@
+//Sean Gaffney
+//id: 19304695
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
