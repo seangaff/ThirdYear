@@ -6,17 +6,17 @@ import java.io.ObjectInputStream;
 
 public class SubContent extends PacketContent {
 
-    String SubTopic;
+    String topic;
 
-    SubContent(String SubTopic) {
+    SubContent(String topic) {
 		type= SUBPACKET;
-		this.SubTopic = SubTopic;
+		this.topic = topic;
 	}
 
     protected SubContent(ObjectInputStream oin) {
 		try {
 			type= SUBPACKET;
-			SubTopic= oin.readUTF();
+			topic= oin.readUTF();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
@@ -27,6 +27,6 @@ public class SubContent extends PacketContent {
     }
 
     public String toString() {
-        return "Sub Reqest for " + SubTopic;
+        return "Sub Reqest for " + topic;
     }
 }
