@@ -25,10 +25,7 @@ public class Subscriber extends Node{
 
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
-			DatagramPacket response;
-            response= new AckPacketContent("OK - Received this").toDatagramPacket();
-            response.setSocketAddress(packet.getSocketAddress());
-            socket.send(response);
+            System.out.println("Packet was Recieved");
 
 			PacketContent content= PacketContent.fromDatagramPacket(packet);
 
@@ -47,21 +44,22 @@ public class Subscriber extends Node{
                 else {
                     System.out.println("Did not move the window");
                 }
-                this.notify();
+                
 			}
+            //this.notify();
 		}
 		catch(Exception e) {e.printStackTrace();}
         
     }
 
     public synchronized void start() throws Exception {
-        /*
+        
         DatagramPacket request;
         request= new SubContent(PacketContent.TEMP).toDatagramPacket();
         request.setSocketAddress(dstAddress);
         socket.send(request);
+        System.out.println("" + new SubContent(PacketContent.TEMP).getTopic());
 		System.out.println("Waiting for contact");
-        */
 		this.wait();
 	}
 

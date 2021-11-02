@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 
 public class SubContent extends PacketContent {
 
-    byte topic;
+    //byte topic;
 
     SubContent(byte topic) {
 		type= SUBPACKET;
@@ -16,13 +16,16 @@ public class SubContent extends PacketContent {
     protected SubContent(ObjectInputStream oin) {
 		try {
 			type= SUBPACKET;
-			topic = NOTOP;
+			topic = oin.readByte();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}
 
-    protected void toObjectOutputStream(ObjectOutputStream out) {
-        // TODO Auto-generated method stub
+    protected void toObjectOutputStream(ObjectOutputStream oout) {
+        try {
+			//oout.writeByte(topic);
+		}
+		catch(Exception e) {e.printStackTrace();}
         
     }
 

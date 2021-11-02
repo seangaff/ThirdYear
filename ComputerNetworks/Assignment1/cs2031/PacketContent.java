@@ -44,7 +44,7 @@ public abstract class PacketContent {
 			oin= new ObjectInputStream(bin);
 
 			type = oin.readByte();  // read type from beginning of packet
-			topic = oin.readByte();
+			//topic = oin.readByte();
 
 			switch(type) {   // depending on type create content object
 			case ACKPACKET:

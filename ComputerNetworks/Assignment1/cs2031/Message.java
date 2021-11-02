@@ -18,7 +18,7 @@ public class Message extends PacketContent{
 		try {
 			type = MESSAGE;
 			topic = oin.readByte();
-			theMessage= oin.readUTF();
+			theMessage = oin.readUTF();
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}

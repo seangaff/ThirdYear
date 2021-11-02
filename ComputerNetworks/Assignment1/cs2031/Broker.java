@@ -20,7 +20,7 @@ public class Broker extends Node {
             temperature = new ArrayList<InetSocketAddress>();
             humidity = new ArrayList<InetSocketAddress>();
             packetCount = 0;
-            temperature.add(subscriberAddress);
+            //temperature.add(subscriberAddress);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,7 +63,7 @@ public class Broker extends Node {
                             break;
                         case PacketContent.NOTOP:
                         default:
-                            System.err.println("Error: Unexpected packet received (topic error)");
+                            System.err.println("Error: Unexpected packet received topic:" + packetTopic);
                             break;
                     }
                     break;
@@ -77,7 +77,7 @@ public class Broker extends Node {
                         System.out.print(""+humidity.size());
                     }
                     else {
-                        System.err.println("Error: Unexpected packet received (invalid topic)");
+                        System.err.println("Error: Unexpected packet received topic:" + packetTopic);
                     }
                     break;
                 default:
