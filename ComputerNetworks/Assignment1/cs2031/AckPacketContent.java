@@ -16,6 +16,7 @@ public class AckPacketContent extends PacketContent {
 	 */
 	AckPacketContent(String info) {
 		type= ACKPACKET;
+		topic = NOTOP;
 		this.info = info;
 	}
 

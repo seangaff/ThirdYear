@@ -19,7 +19,7 @@ public abstract class Node {
 	//public static final String DEFAULT_DST_NODE = "broker";
 	//public static final int DEFAULT_DST_PORT = 50000;
 
-	public static final InetSocketAddress brokerAddress = new InetSocketAddress("broker", BROKER_PORT);
+	public static final InetSocketAddress brokerAddress = new InetSocketAddress("broker2", BROKER_PORT);
 	public static final InetSocketAddress serverAddress = new InetSocketAddress("server", SERVER_PORT);
     public static final InetSocketAddress clientAddress = new InetSocketAddress("client", ClIENT_PORT);
 	public static final InetSocketAddress subscriberAddress = new InetSocketAddress("subscriber", SUBSCRIBER_PORT);

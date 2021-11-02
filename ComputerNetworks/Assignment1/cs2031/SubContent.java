@@ -6,9 +6,9 @@ import java.io.ObjectInputStream;
 
 public class SubContent extends PacketContent {
 
-    String topic;
+    byte topic;
 
-    SubContent(String topic) {
+    SubContent(byte topic) {
 		type= SUBPACKET;
 		this.topic = topic;
 	}
@@ -16,7 +16,7 @@ public class SubContent extends PacketContent {
     protected SubContent(ObjectInputStream oin) {
 		try {
 			type= SUBPACKET;
-			topic= oin.readUTF();
+			topic = NOTOP;
 		}
 		catch(Exception e) {e.printStackTrace();}
 	}

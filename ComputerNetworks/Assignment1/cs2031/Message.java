@@ -8,14 +8,16 @@ public class Message extends PacketContent{
 
     String theMessage;
 
-    Message(String theMessage) {
-        type= MESSAGE;
+    Message(byte topic, String theMessage) {
+        type = MESSAGE;
+        this.topic = topic;
         this.theMessage = theMessage;
     }
 
     protected Message(ObjectInputStream oin) {
 		try {
-			type= MESSAGE;
+			type = MESSAGE;
+			topic = oin.readByte();
 			theMessage= oin.readUTF();
 		}
 		catch(Exception e) {e.printStackTrace();}

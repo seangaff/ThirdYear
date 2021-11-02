@@ -41,7 +41,6 @@ public class Client extends Node {
 	 */
 	public synchronized void onReceipt(DatagramPacket packet) {
 		PacketContent content= PacketContent.fromDatagramPacket(packet);
-
 		System.out.println(content.toString());
 		this.notify();
 	}
@@ -52,39 +51,20 @@ public class Client extends Node {
 	 *
 	 */
 	public synchronized void start() throws Exception {
-		/*
-		String fname;
-		File file= null;
-		FileInputStream fin= null;
-
-		FileInfoContent fcontent;
-
-		int size;
-		byte[] buffer= null;
-		DatagramPacket packet= null;
-
-		fname= "message.txt";//terminal.readString("Name of file: ");
-
-		file= new File(fname);				// Reserve buffer for length of file and read file
-		buffer= new byte[(int) file.length()];
-		fin= new FileInputStream(file);
-		size= fin.read(buffer);
-		if (size==-1) {
-			fin.close();
-			throw new Exception("Problem with File Access:"+fname);
-		}
-		System.out.println("File size: " + buffer.length);
-
-		fcontent= new FileInfoContent(fname, size);
-
-		System.out.println("Sending packet w/ name & length"); // Send packet with file name and length
-		*/
-		Random rand = new Random();
-		int topic = rand.nextInt(10);
+				Random rand = new Random();
+		int topic = rand.nextInt(10); //randomly picks a topic to publish to
 		int value = rand.nextInt(100);
 
 		DatagramPacket packet;
-		packet= new Message("Temperature: " + value).toDatagramPacket();
+		if(topic > 5) {
+			packet = new Message(PacketContent.TEMP, "Temperature:" + value).toDatagramPacket();
+			System.out.println("Temperature:" + value);
+		
+		}
+		else {
+			packet = new Message(PacketContent.HUMIDITY,"Humidity:" + value).toDatagramPacket();
+			System.out.println("Humidity:" + value);
+		}
 		packet.setSocketAddress(dstAddress);
 		socket.send(packet);
 		System.out.println("Packet sent");

@@ -30,9 +30,8 @@ public class Server extends Node {
 
 			PacketContent content= PacketContent.fromDatagramPacket(packet);
 
-			if (content.getType()==PacketContent.FILEINFO) {
-				System.out.println("File name: " + ((FileInfoContent)content).getFileName());
-				System.out.println("File size: " + ((FileInfoContent)content).getFileSize());
+			if (content.getType()==PacketContent.MESSAGE) {
+				System.out.println("" + ((Message)content).toString());
 
 				DatagramPacket response;
 				response= new AckPacketContent("OK - Received this").toDatagramPacket();
@@ -45,8 +44,17 @@ public class Server extends Node {
 
 
 	public synchronized void start() throws Exception {
-		System.out.println("Waiting for contact");
+		Scanner input = new Scanner(System.in);
+		System.out.print("Enter '1' to subscribe to a topic\n" + 
+						"Enter '2' to send a message\n");
+
+		System.out.print("Enter '1' to subscribe to temperature readings\n" + 
+						"Enter '2' to subscribe to humidity readings\n");
+
+		System.out.print("Enter '1' to send a temperature reading\n" + 
+						"Enter '2' to send a humidity reading\n");
 		this.wait();
+		//input.close();
 	}
 
 	/*

@@ -12,17 +12,17 @@ import java.io.ObjectOutputStream;
  */
 public abstract class PacketContent {
 
-	public static final int ACKPACKET= 10;
-	public static final int FILEINFO = 20;
-	public static final int SUBPACKET = 30;
-	public static final int MESSAGE = 40;
+	public static final byte ACKPACKET= 1;
+	public static final byte SUBPACKET = 2;
+	public static final byte MESSAGE = 3;
+	public static final byte FILEINFO = 4;
 
-	public static final int NOTOP = 0;
-	public static final int TEMP = 1;
-	public static final int HUMIDITY = 2;
+	public static final byte NOTOP = 0;
+	public static final byte TEMP = 10;
+	public static final byte HUMIDITY = 20;
 
-	int type= 0;
-	int topic = 0;
+	byte type = 0;
+	byte topic = 0;
 
 	/**
 	 * Constructs an object out of a datagram packet.
@@ -32,8 +32,8 @@ public abstract class PacketContent {
 		PacketContent content= null;
 
 		try {
-			int type;
-			int topic;
+			byte type;
+			byte topic;
 
 			byte[] data;
 			ByteArrayInputStream bin;
@@ -43,17 +43,18 @@ public abstract class PacketContent {
 			bin= new ByteArrayInputStream(data);
 			oin= new ObjectInputStream(bin);
 
-			type= oin.readInt();  // read type from beginning of packet
+			type = oin.readByte();  // read type from beginning of packet
+			topic = oin.readByte();
 
 			switch(type) {   // depending on type create content object
 			case ACKPACKET:
 				content= new AckPacketContent(oin);
 				break;
-			case FILEINFO:
-				content= new FileInfoContent(oin);
-				break;
 			case SUBPACKET:
 				content = new SubContent(oin);
+				break;
+			case MESSAGE:
+				content = new Message(oin);
 				break;
 			default:
 				content= null;
@@ -92,7 +93,8 @@ public abstract class PacketContent {
 			bout= new ByteArrayOutputStream();
 			oout= new ObjectOutputStream(bout);
 
-			oout.writeInt(type);         // write type to stream
+			oout.writeByte(type);         // write type to stream
+			oout.writeByte(topic);
 			toObjectOutputStream(oout);  // write content to stream depending on type
 
 			oout.flush();
@@ -120,10 +122,10 @@ public abstract class PacketContent {
 	 *
 	 * @return Returns the type of the packet.
 	 */
-	public int getType() {
+	public byte getType() {
 		return type;
 	}
-	public int getTopic() {
+	public byte getTopic() {
 		return topic;
 	}
 

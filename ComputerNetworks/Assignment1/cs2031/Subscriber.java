@@ -9,8 +9,13 @@ import java.net.InetSocketAddress;
 
 public class Subscriber extends Node{
 
+    InetSocketAddress dstAddress;
+    boolean windowOpen;
+
     Subscriber(int port) {
         try {
+            windowOpen = false;
+            dstAddress = brokerAddress;
             socket = new DatagramSocket(port);
             listener.go();
         } catch (Exception e) {
@@ -20,12 +25,28 @@ public class Subscriber extends Node{
 
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
-			System.out.println("Received packet");
+			DatagramPacket response;
+            response= new AckPacketContent("OK - Received this").toDatagramPacket();
+            response.setSocketAddress(packet.getSocketAddress());
+            socket.send(response);
 
 			PacketContent content= PacketContent.fromDatagramPacket(packet);
 
-			if (content.getType()==PacketContent.FILEINFO) {
+			if (content.getType()==PacketContent.MESSAGE) {
                 System.out.println(content.toString());
+                String[] arrOfStr = content.toString().split(":", 2);
+                int tempVal = Integer.parseInt(arrOfStr[1]);
+                if(tempVal > 50 && windowOpen == false) {
+                    windowOpen = true;
+                    System.out.println("Opened the window");
+                }
+                else if (tempVal < 50 && windowOpen == true) {
+                    windowOpen = false;
+                    System.out.println("Closed the window");
+                }
+                else {
+                    System.out.println("Did not move the window");
+                }
                 this.notify();
 			}
 		}
@@ -34,7 +55,13 @@ public class Subscriber extends Node{
     }
 
     public synchronized void start() throws Exception {
+        /*
+        DatagramPacket request;
+        request= new SubContent(PacketContent.TEMP).toDatagramPacket();
+        request.setSocketAddress(dstAddress);
+        socket.send(request);
 		System.out.println("Waiting for contact");
+        */
 		this.wait();
 	}
 
