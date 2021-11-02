@@ -15,10 +15,11 @@ public abstract class PacketContent {
 	public static final int ACKPACKET= 10;
 	public static final int FILEINFO = 20;
 	public static final int SUBPACKET = 30;
+	public static final int MESSAGE = 40;
 
 	public static final int NOTOP = 0;
-	public static final int TOPA = 1;
-	public static final int TOPB = 2;
+	public static final int TEMP = 1;
+	public static final int HUMIDITY = 2;
 
 	int type= 0;
 	int topic = 0;

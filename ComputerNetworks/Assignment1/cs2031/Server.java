@@ -3,18 +3,20 @@
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Scanner;
+//Scanner input = new Scanner(System.in);
+//double income = input.nextDouble();
+//input.close();
 
 public class Server extends Node {
 	//static final int DEFAULT_PORT = 50001;
 	/*
 	 *
 	 */
-	int count;
 	Server(int port) {
 		try {
 			socket= new DatagramSocket(port);
 			listener.go();
-			count = 0;
 		}
 		catch(java.lang.Exception e) {e.printStackTrace();}
 	}
@@ -36,8 +38,6 @@ public class Server extends Node {
 				response= new AckPacketContent("OK - Received this").toDatagramPacket();
 				response.setSocketAddress(packet.getSocketAddress());
 				socket.send(response);
-				count++;
-				System.out.println("Count: " + count);
 			}
 		}
 		catch(Exception e) {e.printStackTrace();}

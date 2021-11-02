@@ -7,8 +7,9 @@
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
-import java.io.File;
-import java.io.FileInputStream;
+//import java.io.File;
+//import java.io.FileInputStream;
+import java.util.Random;
 
 /**
  *
@@ -18,8 +19,6 @@ import java.io.FileInputStream;
  *
  */
 public class Client extends Node {
-	//static final int DEFAULT_SRC_PORT = 50000;
-	//static final int DEFAULT_DST_PORT = 50001;
 	InetSocketAddress dstAddress;
 
 	/**
@@ -53,6 +52,7 @@ public class Client extends Node {
 	 *
 	 */
 	public synchronized void start() throws Exception {
+		/*
 		String fname;
 		File file= null;
 		FileInputStream fin= null;
@@ -78,12 +78,18 @@ public class Client extends Node {
 		fcontent= new FileInfoContent(fname, size);
 
 		System.out.println("Sending packet w/ name & length"); // Send packet with file name and length
-		packet= fcontent.toDatagramPacket();
+		*/
+		Random rand = new Random();
+		int topic = rand.nextInt(10);
+		int value = rand.nextInt(100);
+
+		DatagramPacket packet;
+		packet= new Message("Temperature: " + value).toDatagramPacket();
 		packet.setSocketAddress(dstAddress);
 		socket.send(packet);
 		System.out.println("Packet sent");
 		this.wait();
-		fin.close();
+		//fin.close();
 	}
 
 

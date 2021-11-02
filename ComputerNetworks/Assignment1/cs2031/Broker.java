@@ -11,6 +11,7 @@ public class Broker extends Node {
 
     ArrayList<InetSocketAddress> TopicA;
     ArrayList<InetSocketAddress> TopicB;
+    int packetCount;
 
     Broker(int port) {
         try {
@@ -18,6 +19,7 @@ public class Broker extends Node {
             listener.go();
             TopicA = new ArrayList<InetSocketAddress>();
             TopicB = new ArrayList<InetSocketAddress>();
+            packetCount = 0;
             TopicA.add(serverAddress);
         } catch (Exception e) {
             e.printStackTrace();
@@ -26,7 +28,7 @@ public class Broker extends Node {
 
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
-            System.out.println("Received packet");
+            System.out.println("Received packet: " + packetCount);
 
             DatagramPacket response;
             response = new AckPacketContent("OK - Received this").toDatagramPacket();
@@ -35,23 +37,21 @@ public class Broker extends Node {
 
 			PacketContent content= PacketContent.fromDatagramPacket(packet);
             int packetType = content.getType();
-            int packetTopic = PacketContent.TOPA;
+            int packetTopic = PacketContent.TEMP;
             switch(packetType) { 
                 case PacketContent.ACKPACKET:
                     System.out.print("Received Ack packet");
                     break;
-                case PacketContent.FILEINFO:
+                case PacketContent.MESSAGE:
                     System.out.println("Received FileInfo packet, sending to subscribers");
                     DatagramPacket copyPacket = packet;
                     switch(packetTopic) {
-                        case PacketContent.TOPA:
-                            //for(InetSocketAddress i : TopicA) {
+                        case PacketContent.TEMP:
                             copyPacket.setSocketAddress(serverAddress);
                             socket.send(copyPacket);
                             System.out.println("Forwarded to Subscriber");
-                            //}
                             break;
-                        case PacketContent.TOPB:
+                        case PacketContent.HUMIDITY:
                             for(InetSocketAddress i : TopicB) {
                                 copyPacket.setSocketAddress(i);
                                 socket.send(copyPacket);
@@ -62,12 +62,11 @@ public class Broker extends Node {
                             System.err.println("Error: Unexpected packet received");
                             break;
                     }
-
                     break;
                 case PacketContent.SUBPACKET:
                     System.out.println("Received  Sub packet, adding sender to subscribers");
-                    //TopicA.add(packet.getSocketAddress());
                     break;
+                case PacketContent.FILEINFO:
                 default:
                    System.err.println("Error: Unexpected packet received");
                    break;
