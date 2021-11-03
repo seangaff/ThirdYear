@@ -51,7 +51,7 @@ public class Client extends Node {
 	 *
 	 */
 	public synchronized void start() throws Exception {
-				Random rand = new Random();
+		Random rand = new Random();
 		int topic = rand.nextInt(10); //randomly picks a topic to publish to
 		int value = rand.nextInt(100);
 
