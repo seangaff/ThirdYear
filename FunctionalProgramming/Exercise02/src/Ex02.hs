@@ -2,9 +2,9 @@
 module Ex02 where
 
 name, idno, username :: String
-name      =  "Myself, Me"  -- replace with your name
-idno      =  "01234567"    -- replace with your student id
-username  =  "memyselfi"   -- replace with your TCD username
+name      =  "Gaffney, Sean"  -- replace with your name
+idno      =  "19304695"    -- replace with your student id
+username  =  "gaffnese"   -- replace with your TCD username
 
 
 declaration -- do not modify this
@@ -57,7 +57,28 @@ v42 = Val 42 ; j42 = Just v42
   -- see test outcomes for the precise format of those messages
 
 eval :: EDict -> Expr -> Either String Double
-eval d e = error "eval NYI"
+eval _ (Val x) = Right x
+eval d (Var x) = find d x
+eval d (Add x y) = case (eval d x, eval d y) of
+                    (Right m, Right n)    -> Right (m+n)
+                    (Left m, _)           -> Left m
+                    (_, Left n)           -> Left n
+eval d (Mul x y) = case (eval d x, eval d y) of 
+                    (Right m, Right n)    -> Right (m*n)
+                    (Left m, _)           -> Left m
+                    (_, Left n)           -> Left n
+eval d (Sub x y) = case (eval d x, eval d y) of
+                    (Right m, Right n)    -> Right (m-n)
+                    (Left m, _)           -> Left m
+                    (_, Left n)           -> Left n
+eval d (Dvd x y) = case (eval d x, eval d y) of 
+                    (Right m, Right 0.0)  -> Left "div by zero"
+                    (Right m, Right n)    -> Right (m/n)
+                    (Left m, _)           -> Left m
+                    (_, Left n)           -> Left n
+eval d (Def x e1 e2) = case eval d e1 of 
+                    (Left v1)             -> Left "div by zero"
+                    (Right v1)            -> eval (define d x v1) e2
 
 -- Part 1 : Expression Laws -- (15 test marks, worth 15 Exercise Marks) --------
 
@@ -83,13 +104,18 @@ There are many, many laws of algebra that apply to our expressions, e.g.,
 
 
 law1 :: Expr -> Maybe Expr
-law1 e = error "law1 NYI"
+law1 (Add x y) = Just (Add y x)
+law1 _ = Nothing
 
 law2 :: Expr -> Maybe Expr
-law2 e = error "law2 NYI"
+law2 (Add (Add x y) z) = Just (Add x (Add y z))
+law2 _ = Nothing
 
 law3 :: Expr -> Maybe Expr
-law3 e = error "law3 NYI"
+law3 (Sub (Sub x y) z) = Just (Sub x (Add y z))
+law3 _ = Nothing
 
 law4 :: Expr -> Maybe Expr
-law4 e = error "law4 NYI"
+law4 (Sub (Mul a c) (Mul b d))  |  a == c && b == d = Just (Mul (Add a b) (Sub c d))
+                               | otherwise = Nothing
+law4 _ = Nothing
