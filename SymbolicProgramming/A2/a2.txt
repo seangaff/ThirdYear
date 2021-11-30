@@ -1,0 +1,46 @@
+%CSU34011 Assignment 2
+%Sean Gaffney
+%change to .pl to run or copy to SWISH
+
+
+%1:
+nbd([h(A,B,C),h(D,E,F),h(G,H,I)],[]) :- nbdFun([A,B,C,D,E,F,G,H,I],[]).
+nbdFun --> h(Col1,Nat1,Pet1), h(Col2,Nat2,Pet2), h(Col3,Nat3,Pet3),
+    {Col1 \== Col2}, {Col1 \== Col3}, {Col2 \== Col3},
+    {Nat1 \== Nat2}, {Nat1 \== Nat3}, {Nat2 \== Nat3},
+    {Pet1 \== Pet2}, {Pet1 \== Pet3}, {Pet2 \== Pet3}.
+h(Col, Nat, Pet) --> colour(Col), nationality(Nat), pet(Pet).
+
+colour(red) --> [red].
+colour(green) --> [green].
+colour(blue) --> [blue].
+
+nationality(english) --> [english].
+nationality(spanish) --> [spanish].
+nationality(japanese) --> [japanese].
+
+pet(snail) --> [snail].
+pet(jaguar) --> [jaguar].
+pet(zebra) --> [zebra].
+
+%2:
+fib --> [0,1], fibFun(0,1).
+fibFun(_,_) --> [].
+fibFun(F2,F1) --> {F is F2+F1}, [F], fibFun(F1,F).
+
+%3a:
+accept(N,String) :- steps(N,q0,String,Q), final(N,Q).
+steps(_,Q,[],Q).
+steps(N,Q1,[H|T],Q2) :- tran(N,Q1,H,Q), steps(N,Q,T,Q2).
+
+%3b:
+s(n, s,[])
+
+
+%3c:
+ith(i, n,Z) :- nth0(i,n,Z)
+initial(i, n,Z)
+
+
+
+
