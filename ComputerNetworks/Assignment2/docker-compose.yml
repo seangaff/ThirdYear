@@ -1,0 +1,131 @@
+version: "3"
+services:
+#   #You can open the cli for this container seperately to record traffic
+#   # docker exec -it Router0 bash
+#   # cd /src && tshark -i any -f "udp" -w "result.pcap"
+#   # you must quit the process before running docker compose down
+  Router0:
+    container_name: Router0
+    image: tshark
+    cap_add: ['ALL']
+    volumes:
+      - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+    command: java -cp /src Router 0
+    networks:
+      - net0
+      - net1 
+  #you must run the application from a new terminal to have user input
+  #docker exec -it Endpoint0 bash
+  #java -cp /src Application Bill
+  Endpoint0:
+    container_name: Endpoint0
+    image: flowctrl
+    cap_add: ['ALL']
+    volumes:
+      - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+    command: java -cp /src  Service 0 
+    networks:
+      - net0
+  #docker exec -it Endpoint1 bash
+  #java -cp /src Application Ted
+  Endpoint1:
+    container_name: Endpoint1
+    image: flowctrl
+    cap_add: ['ALL']
+    volumes:
+      - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+    command: java -cp /src  Service 1
+    networks:
+      - net1
+networks:
+  net0:
+    name: network0
+  net1:
+    name: network1
+
+# version: "3"
+
+# services:
+#   Controller:
+#     container_name: Controller
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src Controller 1
+  
+#   #You can open the cli for this container seperately to record traffic
+#   # docker exec -it Router 0 bash
+#   # cd /src && tshark -i any -f "udp" -w "result.pcap"
+#   # you must quit the process before running docker compose down
+#   Router0:
+#     container_name: Router0
+#     image: tshark
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src Router 0
+#     networks:
+#       - net0
+#       - net1
+#   Router1:
+#     container_name: Router1
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src Router 1
+#     networks:
+#         - net0
+#   Router2:
+#     container_name: Router2
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src Router 2
+#     networks:
+#       - net1
+#       - net2
+#   Router3:
+#     container_name: Router3
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src Router 3
+#     networks:
+#       - net1
+#       - net2
+
+#   #you must run the application from a new terminal to have user input
+#   #docker exec -it Endpoint0 bash
+#   #java -cp /src Application Bill
+#   Endpoint0:
+#     container_name: Endpoint0
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src  Service 0 
+#     networks:
+#       - net0
+#   #docker exec -it Endpoint1 bash
+#   #java -cp /src Application Ted
+#   Endpoint1:
+#     container_name: Endpoint1
+#     image: flowctrl
+#     cap_add: ['ALL']
+#     volumes:
+#       - /Users/seangaffney/Documents/ThirdYear/ComputerNetworks/Assignment2/bin:/src
+#     command: java -cp /src  Service 1
+#     networks:
+#       - net2
+
+# networks:
+#   net0:
+#     name: network0
+#   net1:
+#     name: network1
+#   net2:
+#     name: network2
