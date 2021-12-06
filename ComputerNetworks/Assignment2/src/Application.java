@@ -27,12 +27,12 @@ public class Application extends Node {
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
             System.out.println("New Message:"); 
-            PacketContent content = new PacketContent(packet);
-            if(designation.equals(content.getDestination())) {
-                System.out.println("\n" + content.getMessage());
+            PacketContent contentA = new PacketContent(packet);
+            if(designation.equals(contentA.getDestination())) {
+                System.out.println("\n" + contentA.getMessage());
             }
             else {
-                System.out.println("Wrong address: "+content.getDestination());
+                System.out.println("Wrong address: "+contentA.getDestination());
                 System.out.println("address        "+designation);
             }
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class Application extends Node {
     public void start(){
         try {
             InetSocketAddress service = new InetSocketAddress(localAddress, DEFAULT_PORT);
-            DatagramPacket appREQ = new PacketContent(PacketContent.APPREQ,designation,"").toDatagramPacket();
+            DatagramPacket appREQ = new PacketContent(PacketContent.APPREQ,designation,"null").toDatagramPacket();
             appREQ.setSocketAddress(service);
 		    socket.send(appREQ);
             System.out.println("Designation sent to Service");
@@ -52,9 +52,9 @@ public class Application extends Node {
 
             while(true) {
                 System.out.println("Enter destination: ");
-                String dest = input.nextLine();
+                String dest = input.nextLine().strip();
                 System.out.println("Enter message: ");
-                String mes = input.nextLine();
+                String mes = input.nextLine().strip();
                 if(dest.equals("exit") || mes.equals("exit")) {
                     break;
                 }

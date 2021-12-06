@@ -19,10 +19,10 @@ public class PacketContent {
     public static final int FLOWREQ = 4; //Request for update from controller
     public static final int APPREQ = 5;  //request to service for content
 
-    public static final int COMBINATION = 9; //string message with subnet destination
+    public static final int COMBINATION = 9;
 
     byte type;
-    byte length;
+    byte VallLength;
     String value;
     String destination;
     String message;
@@ -33,7 +33,7 @@ public class PacketContent {
         ByteArrayInputStream input = new ByteArrayInputStream(TLV);
         try {
             type = (byte) input.read();
-            length = (byte) input.read();
+            VallLength = (byte) input.read();
             value = "";
             int c;
             while((c = input.read())!= -1) {
@@ -88,15 +88,15 @@ public class PacketContent {
         outputStream.write(type);
         outputStream.write((byte) value.length());
         outputStream.write(value.getBytes());
-        TLV = outputStream.toByteArray();
         outputStream.close();
+        TLV = outputStream.toByteArray();
     }
 
     public int getType() {
         return type;
     }
     public int getLength() {
-        return length;
+        return VallLength;
     }
     public String getValue() {
         return value;

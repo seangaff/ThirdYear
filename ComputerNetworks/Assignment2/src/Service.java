@@ -1,6 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
+//import java.net.SocketAddress;
 import java.net.InetAddress;
 import java.util.HashMap;
 
@@ -19,13 +20,6 @@ public class Service extends Node {
             this.designation = designation;
             localAddress = InetAddress.getLocalHost();
             flowTable = new HashMap<String, InetSocketAddress>();
-            // if(designation.equals("0")) {
-            //     flowTable.put("Ted", R0address);
-            // }
-            // else if (designation.equals("1")) {
-            //     flowTable.put("Bill", R2address);
-            //     flowTable.put("Bill", R3address);
-            // }
 		}
 		catch(java.lang.Exception e) {e.printStackTrace();}
 	}
@@ -33,17 +27,18 @@ public class Service extends Node {
     public synchronized void onReceipt(DatagramPacket packet) {
         try {
             InetSocketAddress application = new InetSocketAddress(localAddress, APP_PORT);
-            PacketContent content = new PacketContent(packet);
-            int packetType = content.getType();
-            String destination = content.getDestination();
+            PacketContent contentS = new PacketContent(packet);
+            int packetType = contentS.getType();
+            String destination = contentS.getDestination();
             if(APP_PORT == packet.getPort()) {
                 System.out.println("Packet Recieved From Local App");
                 switch(packetType) {
                     case PacketContent.MESSAGE:
                         if(flowTable.containsKey(destination)) {
+                            //System.out.println(flowTable.get(destination).toString());
                             packet.setSocketAddress(flowTable.get(destination));
                             socket.send(packet);
-                            System.out.println("Forwared Message");
+                            System.out.println("Forwarded Message");
                         }
                         else {
                             System.out.println(""+destination);
@@ -61,10 +56,8 @@ public class Service extends Node {
                         }
                         else if (destination.equals("Ted")) {
                             flowTable.put("Ted",application);
-
-                            flowTable.put("Bill", R0address);
-                            // flowTable.put("Bill", R2address);
-                            // flowTable.put("Bill", R3address);
+                            flowTable.put("Bill", R2address);
+                            //flowTable.put("Bill", R3address);
                         }
                         else {
                             System.out.println("Error: "+destination);

@@ -16,6 +16,7 @@ public abstract class Node {
 
 	public static final InetSocketAddress controllerAddress = new InetSocketAddress("Controller", CONTROLLER_PORT);
 	public static final InetSocketAddress R0address = new InetSocketAddress("Router0", DEFAULT_PORT);
+	public static final InetSocketAddress R1address = new InetSocketAddress("Router0", DEFAULT_PORT);
 	public static final InetSocketAddress R2address = new InetSocketAddress("Router2", DEFAULT_PORT);
 	public static final InetSocketAddress R3address = new InetSocketAddress("Router3", DEFAULT_PORT);
 	public static final InetSocketAddress E0address = new InetSocketAddress("Endpoint0", DEFAULT_PORT);
