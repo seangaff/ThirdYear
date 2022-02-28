@@ -1,0 +1,35 @@
+astar(Node,Path,Cost,KB) :-
+    astarRec([[Node,[],0]],RPath,Cost,KB),
+    reverse(RPath,Path).
+
+astarRec([[Node,Path,Cost]|_],[Node|Path],Cost,_) :- goal(Node).
+astarRec([[Node,PastPath,PCost]|Rest],TotPath,TotCost,KB) :-
+    findall([X,[Node|PastPath],NCost],(arc(Node,X,Cost,KB),NCost is PCost+Cost), Children),
+    add2Frontier(Children,Rest,New),
+    astarRec(New,TotPath,TotCost,KB).
+
+minSort(UnSort,Sort) :- minSort(UnSort,[],Sort).
+minSort([],Sort,Sort).
+minSort([H|T],Sorted,Sort) :-
+    insert(H,Sorted,ToSort),
+    minSort(T,ToSort,Sort).
+
+insert(X,[],[X]).
+insert(X,[H|T],[X,H|T]) :- lessThan(X,H).
+insert(X,[H|T],[H|T1]) :- \+lessThan(X,H), insert(X,T,T1).
+
+add2Frontier(Children,Frontier,NewFrontier):- append(Children,Frontier,Temp),
+    minSort(Temp,NewFrontier).
+
+lessThan([[Node1|_],Cost1],[[Node2|_],Cost2]) :-
+    heuristic(Node1,Hvalue1), heuristic(Node2,Hvalue2),
+    F1 is Cost1+Hvalue1, 
+    F2 is Cost2+Hvalue2,
+    F1 =< F2.
+
+arc([H|T],Node,Cost,KB) :- member([H|B],KB), append(B,T,Node),
+	length(B,L), Cost is 1+ L/(L+1).
+
+heuristic(Node, H) :- length(Node, H).
+
+goal([]).
