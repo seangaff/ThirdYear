@@ -11,8 +11,20 @@ import sys
 import socket
 from threading import Thread
 import ssl
+import time
+import requests
+import os
 # import argparse
-# import os
+
+set_proxy = ""
+set_port = "12345"
+
+def Proxy_on():
+    os.system('networksetup -setwebproxy Ethernet '+set_proxy+' '+set_port)
+
+def Proxy_off():
+    os.system('networksetup -setwebproxystate Ethernet off')
+
 
 instructions = """* Traffic will be logged to the console. The below commands are available:
     * /b <URL>   - Block the URL
@@ -32,8 +44,9 @@ class Proxy:
         self.cached_sites = {}
 
     def run(self):
-        self.proxy.bind(("0.0.0.0", self.port))
+        self.proxy.bind(("", self.port))
         self.proxy.listen(100)
+        Thread(target=self.handle_input).start()
         print("- Proxy server is running on port {}".format(self.port))
         print(instructions)
         while True:
@@ -48,6 +61,8 @@ class Proxy:
     def handle_request(self, client):
         head = self.parse_head(client.recv(self.buffer_size))
         headers = head["headers"]
+        for x in headers:
+            print("     - {}".format(x))
         request = "{}\r\n".format(head["meta"])
         for key, value in headers.items():
             request += "{}: {}\r\n".format(key, value)
@@ -113,10 +128,17 @@ class Proxy:
         return data
 
     def block_url(self, url):
+        url = input("- Enter URL to block: ")
         self.blocked_URLS.append(url)
+        print("- URL {} has been blocked".format(url))
     
     def unblock_url(self, url):
-        self.blocked_URLS.remove(url)
+        url = input("- Enter URL to unblock: ")
+        if url in self.blocked_URLS:
+            self.blocked_URLS.remove(url)
+            print("- URL {} has been unblocked".format(url))
+        else:
+            print("- URL {} is not in blocklist".format(url))
 
     def list_blocked_urls(self):
         print("- Blocked URLs:")
@@ -128,13 +150,64 @@ class Proxy:
         for url in self.cached_sites:
             print("     - {}".format(url))
 
-    def block_url_from_console(self):
-        url = input("- Enter URL to block: ")
-        self.block_url(url)
+    def handle_input(self):
+        while True:
+            try:
+                var = input()
+                if(var == "/b"):
+                    self.block_url_from_console()
+                elif(var == "/u"):
+                    self.unblock_url_from_console()
+                elif(var == "/lb"):
+                    self.list_blocked_urls()
+                elif(var == "/c"):
+                    self.list_cached_urls()
+                elif(var == "/q"):
+                    print("- Exiting...")
+                    sys.exit()
+                elif(var == "/h"):
+                    print(instructions)
+                else:
+                    print("- Invalid command")
+            except KeyboardInterrupt:
+                print("- Exiting...")
+                sys.exit()
     
+    #if headers["Method"] == "CONNECT":
+    def handle_https(self, client,browser,headers):
+        # Connect to port 443
+        try:
+            # If successful, send 200 code response
+            client.connect(( headers["Host"], headers["Port"] ))
+            reply = "HTTP/1.0 200 Connection established\r\n"
+            reply += "Proxy-agent: Pyx\r\n"
+            reply += "\r\n"
+            browser.sendall( reply.encode() )
+        except socket.error as err:
+            # If the connection could not be established, exit
+            # Should properly handle the exit with http error code here
+            print(err)
+            #break
+        
+        # Indiscriminately forward bytes
+        browser.setblocking(0)
+        client.setblocking(0)
+        while True:
+            try:
+                request = browser.recv(1024)
+                client.sendall( request )
+            except socket.error as err:
+                pass
+            try:
+                reply = client.recv(1024)
+                browser.sendall( reply )
+            except socket.error as err:
+                pass
 
 
 if __name__ == "__main__":
     print("\n- Starting proxy server...")
+    #Proxy_on()
     proxy = Proxy(12345)
     proxy.run()
+    #Proxy_off()
